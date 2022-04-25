@@ -46,6 +46,22 @@ namespace minesweeper
             }
         }
 
+        public static bool Flip(int row, int col)
+        {
+            if ((row < 0) || (row >= height))
+            {
+                throw new ArgumentOutOfRangeException("Row out of range");
+            }
+
+            if ((col < 0) || (col >= width))
+            {
+                throw new ArgumentOutOfRangeException("Column out of range");
+            }
+
+            spaces[row, col].IsHidden = false;
+            return spaces[row, col].Type == SpaceType.BOMB;
+        }
+
         private static void GenerateBoard()
         {
             spaces = new SpaceBase[height, width];
