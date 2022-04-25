@@ -16,8 +16,8 @@ namespace minesweeper
         public override ConsoleColor GetBackgroundColor()
         {
             if (IsHidden) return ConsoleColor.Black;
-            else if (Detonated) return ConsoleColor.Red;
-            else return ConsoleColor.DarkRed;
+            else if (Detonated) return ConsoleColor.DarkMagenta;
+            else return ConsoleColor.Red;
         }
 
         public override bool Flip(bool byPlayer)
