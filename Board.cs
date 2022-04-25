@@ -62,6 +62,17 @@ namespace minesweeper
             return spaces[row, col].Type == SpaceType.BOMB;
         }
 
+        public static void FlipAll()
+        {
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    spaces[y, x].IsHidden = false;
+                }
+            }
+        }
+
         private static void GenerateBoard()
         {
             spaces = new SpaceBase[height, width];

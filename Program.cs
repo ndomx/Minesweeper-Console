@@ -14,6 +14,7 @@ namespace minesweeper
                 PlayerTurn();
             }
 
+            Board.FlipAll();
             Board.Print();
             Console.WriteLine("You Lost");
         }
