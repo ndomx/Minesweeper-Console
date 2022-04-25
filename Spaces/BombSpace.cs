@@ -4,16 +4,26 @@ namespace minesweeper
 {
     public class BombSpace : SpaceBase
     {
-        protected override string UncoveredText => "X";
+        public bool Detonated { get; set; }
+
+        protected override string UncoveredText => "*";
+
         public BombSpace() : base(SpaceType.BOMB)
         {
-
+            Detonated = false;
         }
 
         public override ConsoleColor GetBackgroundColor()
         {
-            return (IsHidden) ? ConsoleColor.Black : ConsoleColor.Red;
+            if (IsHidden) return ConsoleColor.Black;
+            else if (Detonated) return ConsoleColor.Red;
+            else return ConsoleColor.DarkRed;
         }
 
+        public override bool Flip(bool byPlayer)
+        {
+            Detonated = byPlayer;
+            return base.Flip(byPlayer);
+        }
     }
 }

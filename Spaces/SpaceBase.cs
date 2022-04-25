@@ -23,5 +23,11 @@ namespace minesweeper
             return IsHidden ? " " : UncoveredText;
             // return UncoveredText;
         }
+
+        public virtual bool Flip(bool byPlayer)
+        {
+            IsHidden = false;
+            return Type == SpaceType.BOMB;
+        }
     }
 }
