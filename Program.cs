@@ -4,10 +4,18 @@ namespace minesweeper
 {
     class Program
     {
+        static bool playerLose = false;
+
         static void Main(string[] args)
         {
             GameSetup();
+            while (!playerLose)
+            {
+                PlayerTurn();
+            }
+
             Board.Print();
+            Console.WriteLine("You Lost");
         }
 
         static void GameSetup()
@@ -43,6 +51,30 @@ namespace minesweeper
             }
 
             Board.Initialize(width, height, bombDensity);
+        }
+
+        static void PlayerTurn()
+        {
+            Board.Print();
+
+            string input;
+            int row, col;
+
+            Console.Write("Select row: ");
+            input = Console.ReadLine();
+            if (!(int.TryParse(input, out row)))
+            {
+                throw new ArgumentException($"Invalid input: {input}");
+            }
+
+            Console.Write("Select column: ");
+            input = Console.ReadLine();
+            if (!(int.TryParse(input, out col)))
+            {
+                throw new ArgumentException($"Invalid input: {input}");
+            }
+
+            playerLose = Board.Flip(row, col);
         }
     }
 }
