@@ -5,6 +5,8 @@ namespace minesweeper
 {
     public static class Board
     {
+        public static int BombCount { get; private set; }
+
         private static Random r = new Random();
         private static ConsoleColor DefaultBackground = Console.BackgroundColor;
         private static ConsoleColor DefaultForeground = Console.ForegroundColor;
@@ -85,6 +87,8 @@ namespace minesweeper
         private static void PlaceBombs()
         {
             int bombCount = (int)(width * height * bombDensity);
+            BombCount = bombCount;
+
             int new_x, new_y;
             while (bombCount > 0)
             {
