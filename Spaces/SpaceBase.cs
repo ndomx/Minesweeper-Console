@@ -12,7 +12,7 @@ namespace minesweeper
 
         public abstract ConsoleColor GetBackgroundColor();
 
-        public SpaceBase(SpaceType @type)
+        protected SpaceBase(SpaceType @type)
         {
             Type = @type;
             IsHidden = true;
