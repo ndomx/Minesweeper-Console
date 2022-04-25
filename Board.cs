@@ -58,8 +58,7 @@ namespace minesweeper
                 throw new ArgumentOutOfRangeException("Column out of range");
             }
 
-            spaces[row, col].IsHidden = false;
-            return spaces[row, col].Type == SpaceType.BOMB;
+            return spaces[row, col].Flip(true);
         }
 
         public static void FlipAll()
@@ -68,7 +67,10 @@ namespace minesweeper
             {
                 for (int x = 0; x < width; x++)
                 {
-                    spaces[y, x].IsHidden = false;
+                    if (spaces[y, x].IsHidden)
+                    {
+                        spaces[y, x].Flip(false);
+                    }
                 }
             }
         }
