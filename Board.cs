@@ -29,12 +29,12 @@ namespace minesweeper
             string bounds = new String('-', lineSize);
 
             Console.WriteLine(bounds);
-            for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
             {
                 Console.Write("|");
-                for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
                 {
-                    SpaceBase s = spaces[x,y];
+                    SpaceBase s = spaces[y, x];
                     Console.BackgroundColor = s.GetBackgroundColor();
                     Console.Write(" {0} ", s);
                     Console.BackgroundColor = DefaultBackground;
@@ -48,7 +48,7 @@ namespace minesweeper
 
         private static void GenerateBoard()
         {
-            spaces = new SpaceBase[width, height];
+            spaces = new SpaceBase[height, width];
             PlaceBombs();
             FillSpaces();
         }
@@ -61,12 +61,12 @@ namespace minesweeper
             {
                 new_x = r.Next(width);
                 new_y = r.Next(height);
-                if (spaces[new_x, new_y]?.Type == SpaceType.BOMB)
+                if (spaces[new_y, new_x]?.Type == SpaceType.BOMB)
                 {
                     continue;
                 }
 
-                spaces[new_x, new_y] = new BombSpace();
+                spaces[new_y, new_x] = new BombSpace();
                 bombCount--;
             }
         }
@@ -77,13 +77,13 @@ namespace minesweeper
             {
                 for (int y = 0; y < height; y++)
                 {
-                    if (spaces[x, y]?.Type == SpaceType.BOMB)
+                    if (spaces[y, x]?.Type == SpaceType.BOMB)
                     {
                         continue;
                     }
 
-                    spaces[x, y] = new SafeSpace();
-                    ((SafeSpace)spaces[x, y]).SorroundingBombs = CountBombs(x, y);
+                    spaces[y, x] = new SafeSpace();
+                    ((SafeSpace)spaces[y, x]).SorroundingBombs = CountBombs(x, y);
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace minesweeper
                     if ((j < 0) || (j >= height)) continue;
                     if ((i == x) && (j == y)) continue;
 
-                    if (spaces[i, j]?.Type == SpaceType.BOMB)
+                    if (spaces[j, i]?.Type == SpaceType.BOMB)
                     {
                         count++;
                     }
