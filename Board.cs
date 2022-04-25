@@ -1,7 +1,7 @@
 using System;
-using System.Text;
+using Minesweeper.Spaces;
 
-namespace minesweeper
+namespace Minesweeper
 {
     public static class Board
     {

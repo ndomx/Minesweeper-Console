@@ -1,6 +1,6 @@
 using System;
 
-namespace minesweeper
+namespace Minesweeper.Spaces
 {
     public class BombSpace : SpaceBase
     {

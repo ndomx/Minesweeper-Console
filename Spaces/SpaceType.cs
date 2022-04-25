@@ -1,4 +1,4 @@
-namespace minesweeper
+namespace Minesweeper.Spaces
 {
     public enum SpaceType
     {
