@@ -15,15 +15,19 @@ namespace Minesweeper.Spaces
 
         public override ConsoleColor GetBackgroundColor()
         {
-            if (IsHidden) return ConsoleColor.Black;
+            if (State != SpaceState.DISCOVERED) return ConsoleColor.Black;
             else if (Detonated) return ConsoleColor.DarkMagenta;
             else return ConsoleColor.Red;
         }
 
-        public override bool Flip(bool byPlayer)
+        public override void SetState(PlayerAction action, bool byPlayer = true)
         {
-            Detonated = byPlayer;
-            return base.Flip(byPlayer);
+            if (action == PlayerAction.DISCOVER)
+            {
+                Detonated = byPlayer;
+            }
+            
+            base.SetState(action, byPlayer);
         }
     }
 }

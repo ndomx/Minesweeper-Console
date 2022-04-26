@@ -6,7 +6,9 @@ namespace Minesweeper.Spaces
     {
         public readonly SpaceType Type;
 
-        public bool IsHidden { get; set; }
+        public SpaceState State { get; set; }
+
+        // public bool IsHidden { get; set; }
 
         protected abstract string UncoveredText { get; }
 
@@ -15,19 +17,29 @@ namespace Minesweeper.Spaces
         protected SpaceBase(SpaceType @type)
         {
             Type = @type;
-            IsHidden = true;
+            State = SpaceState.HIDDEN;
         }
 
         public override string ToString()
         {
-            return IsHidden ? " " : UncoveredText;
-            // return UncoveredText;
+            switch (State)
+            {
+                case SpaceState.HIDDEN: return " ";
+                case SpaceState.MARKED: return "M";
+                case SpaceState.UNDEFINED: return "?";
+                case SpaceState.DISCOVERED: return UncoveredText;
+                default: return " ";
+            }
         }
 
-        public virtual bool Flip(bool byPlayer)
+        public virtual void SetState(PlayerAction action, bool byPlayer = true)
         {
-            IsHidden = false;
-            return Type == SpaceType.BOMB;
+            switch (action)
+            {
+                case PlayerAction.MARK_BOMB: State = SpaceState.MARKED; break;
+                case PlayerAction.MARK_UNDEFINED: State = SpaceState.UNDEFINED; break;
+                case PlayerAction.DISCOVER: State = SpaceState.DISCOVERED; break;
+            }
         }
     }
 }

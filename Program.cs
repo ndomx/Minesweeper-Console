@@ -75,7 +75,23 @@ namespace Minesweeper
                 throw new ArgumentException($"Invalid input: {input}");
             }
 
-            playerLose = Board.Flip(row, col);
+            PlayerAction action = GetActionInput();
+
+            playerLose = Board.Flip(row, col, action);
+        }
+
+        static PlayerAction GetActionInput()
+        {
+            Console.Write("Select action (M: Mark, U: ?, else: Reveal): ");
+            string input = Console.ReadLine();
+            if (String.IsNullOrEmpty(input)) return PlayerAction.DISCOVER;
+
+            switch (input.ToUpper()[0])
+            {
+                case 'M': return PlayerAction.MARK_BOMB;
+                case 'U': return PlayerAction.MARK_UNDEFINED;
+                default: return PlayerAction.DISCOVER;
+            }
         }
     }
 }

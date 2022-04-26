@@ -48,7 +48,7 @@ namespace Minesweeper
             }
         }
 
-        public static bool Flip(int row, int col)
+        public static bool Flip(int row, int col, PlayerAction action)
         {
             if ((row < 0) || (row >= height))
             {
@@ -60,7 +60,13 @@ namespace Minesweeper
                 throw new ArgumentOutOfRangeException("Column out of range");
             }
 
-            return spaces[row, col].Flip(true);
+            spaces[row, col].SetState(action);
+            if (spaces[row, col].Type == SpaceType.BOMB)
+            {
+                return (action == PlayerAction.DISCOVER);
+            }
+
+            return false;
         }
 
         public static void FlipAll()
@@ -69,9 +75,9 @@ namespace Minesweeper
             {
                 for (int x = 0; x < width; x++)
                 {
-                    if (spaces[y, x].IsHidden)
+                    if (spaces[y, x].State != SpaceState.DISCOVERED)
                     {
-                        spaces[y, x].Flip(false);
+                        spaces[y, x].SetState(PlayerAction.DISCOVER, false);
                     }
                 }
             }
