@@ -122,12 +122,12 @@ namespace Minesweeper
                     }
 
                     spaces[y, x] = new SafeSpace();
-                    ((SafeSpace)spaces[y, x]).SorroundingBombs = CountBombs(x, y);
+                    ((SafeSpace)spaces[y, x]).SorroundingBombs = CountAdjacentBombs(x, y);
                 }
             }
         }
 
-        private static int CountBombs(int x, int y)
+        private static int CountAdjacentBombs(int x, int y)
         {
             int count = 0;
             for (int i = x - 1; i <= x + 1; i++)
