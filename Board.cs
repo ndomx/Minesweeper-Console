@@ -7,7 +7,7 @@ namespace Minesweeper
     {
         public static int BombCount { get; private set; }
 
-        private static Random r = new Random();
+        private static Random r = new Random(56);
         private static ConsoleColor DefaultBackground = Console.BackgroundColor;
         private static ConsoleColor DefaultForeground = Console.ForegroundColor;
 
@@ -48,7 +48,7 @@ namespace Minesweeper
             }
         }
 
-        public static bool Flip(int row, int col, PlayerAction action)
+        public static bool Flip(int row, int col, PlayerAction action, bool byPlayer = true)
         {
             if ((row < 0) || (row >= height))
             {
@@ -60,10 +60,26 @@ namespace Minesweeper
                 throw new ArgumentOutOfRangeException("Column out of range");
             }
 
-            spaces[row, col].SetState(action);
+            if (spaces[row, col].State != SpaceState.HIDDEN)
+            {
+                return false;
+            }
+
+            spaces[row, col].SetState(action, byPlayer);
+            if (action != PlayerAction.DISCOVER)
+            {
+                return false;
+            }
+
             if (spaces[row, col].Type == SpaceType.BOMB)
             {
-                return (action == PlayerAction.DISCOVER);
+                return true;
+            }
+
+            SafeSpace s = (SafeSpace)spaces[row, col];
+            if (s.SorroundingBombs == 0)
+            {
+                FlipAdjacent(row, col);
             }
 
             return false;
@@ -75,10 +91,23 @@ namespace Minesweeper
             {
                 for (int x = 0; x < width; x++)
                 {
-                    if (spaces[y, x].State != SpaceState.DISCOVERED)
-                    {
-                        spaces[y, x].SetState(PlayerAction.DISCOVER, false);
-                    }
+                    Flip(y, x, PlayerAction.DISCOVER, false);
+                }
+            }
+        }
+
+        private static void FlipAdjacent(int row, int col)
+        {
+            for (int y = row - 1; y <= row + 1; y++)
+            {
+                if ((y < 0) || (y >= height)) continue;
+
+                for (int x = col - 1; x <= col + 1; x++)
+                {
+                    if ((x < 0) || (x >= width)) continue;
+                    if ((x == col) && (y == row)) continue;
+
+                    Flip(y, x, PlayerAction.DISCOVER, false);
                 }
             }
         }
@@ -132,9 +161,10 @@ namespace Minesweeper
             int count = 0;
             for (int i = x - 1; i <= x + 1; i++)
             {
+                if ((i < 0) || (i >= width)) continue;
+
                 for (int j = y - 1; j <= y + 1; j++)
                 {
-                    if ((i < 0) || (i >= width)) continue;
                     if ((j < 0) || (j >= height)) continue;
                     if ((i == x) && (j == y)) continue;
 
