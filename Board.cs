@@ -208,7 +208,6 @@ namespace Minesweeper
         private static void MarkBomb(int row, int col)
         {
             if (spaces[row, col].State == SpaceState.MARKED) return;
-            if (MarkedBombs >= BombCount) return;
 
             MarkedBombs++;
             if (spaces[row, col].Type == SpaceType.BOMB)

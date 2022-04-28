@@ -76,6 +76,7 @@ namespace Minesweeper
             int row, col;
 
             int remainingBombs = Board.BombCount - Board.MarkedBombs;
+            remainingBombs = Math.Max(0, remainingBombs);
             Console.WriteLine("Remaining bombs: {0}", remainingBombs);
             Console.Write("Select row: ");
             input = Console.ReadLine();
