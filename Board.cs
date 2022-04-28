@@ -9,6 +9,8 @@ namespace Minesweeper
         public static int MarkedBombs { get; private set; }
         public static int RemainingBombs { get; private set; }
 
+        public static int UndefinedSpaces { get; private set; }
+
         private static Random r = new Random(56);
         private static ConsoleColor DefaultBackground = Console.BackgroundColor;
         private static ConsoleColor DefaultForeground = Console.ForegroundColor;
@@ -90,6 +92,7 @@ namespace Minesweeper
         private static bool OnSpaceDiscover(int row, int col, bool byPlayer)
         {
             UnmarkBomb(row, col);
+            UnmarkUndefined(row, col);
 
             spaces[row, col].SetState(PlayerAction.DISCOVER, byPlayer);
             if (spaces[row, col].Type == SpaceType.BOMB)
@@ -109,6 +112,8 @@ namespace Minesweeper
         private static bool OnSpaceMarkedAsBomb(int row, int col)
         {
             MarkBomb(row, col);
+            UnmarkUndefined(row, col);
+
             spaces[row, col].SetState(PlayerAction.MARK_BOMB, true);
 
             return false;
@@ -117,6 +122,8 @@ namespace Minesweeper
         private static bool OnSpaceMarkedUndefined(int row, int col)
         {
             UnmarkBomb(row, col);
+            MarkUndefined(row, col);
+            
             spaces[row, col].SetState(PlayerAction.MARK_UNDEFINED, true);
 
             return false;
@@ -225,6 +232,18 @@ namespace Minesweeper
             {
                 RemainingBombs++;
             }
+        }
+
+        private static void MarkUndefined(int row, int col)
+        {
+            if (spaces[row, col].State == SpaceState.UNDEFINED) return;
+            UndefinedSpaces++;
+        }
+
+        private static void UnmarkUndefined(int row, int col)
+        {
+            if (spaces[row, col].State != SpaceState.UNDEFINED) return;
+            UndefinedSpaces--;
         }
     }
 }

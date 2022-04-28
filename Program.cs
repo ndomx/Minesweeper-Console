@@ -130,6 +130,7 @@ namespace Minesweeper
         {
             if (Board.RemainingBombs > 0) return false;
             if (Board.MarkedBombs != Board.BombCount) return false;
+            if (Board.UndefinedSpaces > 0) return false;
 
             return true;
         }
