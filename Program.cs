@@ -5,18 +5,32 @@ namespace Minesweeper
     class Program
     {
         static bool playerLose = false;
+        static bool playerWin = false;
 
         static void Main(string[] args)
         {
-            GameSetup();
-            while (!playerLose)
+            // GameSetup();
+            Board.Initialize(5, 5, 0.1f);
+            // Board.Print();
+            // Board.Flip(0, 0, PlayerAction.DISCOVER);
+
+            while (true)
             {
                 PlayerTurn();
+                if (playerLose)
+                {
+                    OnPlayerLose();
+                    break;
+                }
+
+                if (playerWin)
+                {
+                    OnPlayerWin();
+                    break;
+                }
             }
 
-            Board.FlipAll();
-            Board.Print();
-            Console.WriteLine("You Lost");
+            
         }
 
         static void GameSetup()
@@ -61,6 +75,8 @@ namespace Minesweeper
             string input;
             int row, col;
 
+            int remainingBombs = Board.BombCount - Board.MarkedBombs;
+            Console.WriteLine("Remaining bombs: {0}", remainingBombs);
             Console.Write("Select row: ");
             input = Console.ReadLine();
             if (!(int.TryParse(input, out row)))
@@ -78,6 +94,7 @@ namespace Minesweeper
             PlayerAction action = GetActionInput();
 
             playerLose = Board.Flip(row, col, action);
+            playerWin = (Board.RemainingBombs == 0);
         }
 
         static PlayerAction GetActionInput()
@@ -92,6 +109,20 @@ namespace Minesweeper
                 case 'U': return PlayerAction.MARK_UNDEFINED;
                 default: return PlayerAction.DISCOVER;
             }
+        }
+
+        static void OnPlayerLose()
+        {
+            Board.FlipAll();
+            Board.Print();
+            Console.WriteLine("You Lost");
+        }
+
+        static void OnPlayerWin()
+        {
+            Board.FlipAll();
+            Board.Print();
+            Console.WriteLine("You win!");
         }
     }
 }

@@ -149,6 +149,7 @@ namespace Minesweeper
         {
             int bombCount = (int)(width * height * bombDensity);
             BombCount = bombCount;
+            RemainingBombs = bombCount;
 
             int new_x, new_y;
             while (bombCount > 0)
