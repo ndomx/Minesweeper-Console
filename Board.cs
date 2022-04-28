@@ -6,6 +6,8 @@ namespace Minesweeper
     public static class Board
     {
         public static int BombCount { get; private set; }
+        public static int MarkedBombs { get; private set; }
+        public static int RemainingBombs { get; private set; }
 
         private static Random r = new Random(56);
         private static ConsoleColor DefaultBackground = Console.BackgroundColor;
@@ -65,12 +67,31 @@ namespace Minesweeper
                 return false;
             }
 
-            spaces[row, col].SetState(action, byPlayer);
-            if (action != PlayerAction.DISCOVER)
+            switch (action)
             {
-                return false;
+                case PlayerAction.DISCOVER: return OnSpaceDiscover(row, col, byPlayer);
+                case PlayerAction.MARK_BOMB: return OnSpaceMarkedAsBomb(row, col);
+                case PlayerAction.MARK_UNDEFINED: return OnSpaceMarkedUndefined(row, col);
+                default: throw new ArgumentException("Invalid action");
             }
+        }
 
+        public static void FlipAll()
+        {
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    Flip(y, x, PlayerAction.DISCOVER, false);
+                }
+            }
+        }
+
+        private static bool OnSpaceDiscover(int row, int col, bool byPlayer)
+        {
+            UnmarkBomb(row, col);
+
+            spaces[row, col].SetState(PlayerAction.DISCOVER, byPlayer);
             if (spaces[row, col].Type == SpaceType.BOMB)
             {
                 return true;
@@ -85,15 +106,20 @@ namespace Minesweeper
             return false;
         }
 
-        public static void FlipAll()
+        private static bool OnSpaceMarkedAsBomb(int row, int col)
         {
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    Flip(y, x, PlayerAction.DISCOVER, false);
-                }
-            }
+            MarkBomb(row, col);
+            spaces[row, col].SetState(PlayerAction.MARK_BOMB, true);
+
+            return false;
+        }
+
+        private static bool OnSpaceMarkedUndefined(int row, int col)
+        {
+            UnmarkBomb(row, col);
+            spaces[row, col].SetState(PlayerAction.MARK_UNDEFINED, true);
+
+            return false;
         }
 
         private static void FlipAdjacent(int row, int col)
@@ -176,6 +202,29 @@ namespace Minesweeper
             }
 
             return count;
+        }
+
+        private static void MarkBomb(int row, int col)
+        {
+            if (spaces[row, col].State == SpaceState.MARKED) return;
+            if (MarkedBombs >= BombCount) return;
+
+            MarkedBombs++;
+            if (spaces[row, col].Type == SpaceType.BOMB)
+            {
+                RemainingBombs--;
+            }
+        }
+
+        private static void UnmarkBomb(int row, int col)
+        {
+            if (spaces[row, col].State != SpaceState.MARKED) return;
+
+            MarkedBombs--;
+            if (spaces[row, col].Type == SpaceType.BOMB)
+            {
+                RemainingBombs++;
+            }
         }
     }
 }
