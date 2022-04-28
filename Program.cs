@@ -95,7 +95,7 @@ namespace Minesweeper
             PlayerAction action = GetActionInput();
 
             playerLose = Board.Flip(row, col, action);
-            playerWin = (Board.RemainingBombs == 0);
+            playerWin = EvaluatePlayerWin();
         }
 
         static PlayerAction GetActionInput()
@@ -124,6 +124,14 @@ namespace Minesweeper
             Board.FlipAll();
             Board.Print();
             Console.WriteLine("You win!");
+        }
+
+        static bool EvaluatePlayerWin()
+        {
+            if (Board.RemainingBombs > 0) return false;
+            if (Board.MarkedBombs != Board.BombCount) return false;
+
+            return true;
         }
     }
 }
