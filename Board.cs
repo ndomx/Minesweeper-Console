@@ -62,7 +62,7 @@ namespace Minesweeper
                 throw new ArgumentOutOfRangeException("Column out of range");
             }
 
-            if (spaces[row, col].State != SpaceState.HIDDEN)
+            if (spaces[row, col].State != SpaceState.HIDDEN && !byPlayer)
             {
                 return false;
             }
