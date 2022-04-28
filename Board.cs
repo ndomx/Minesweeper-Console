@@ -11,7 +11,7 @@ namespace Minesweeper
 
         public static int UndefinedSpaces { get; private set; }
 
-        private static Random r = new Random(56);
+        private static Random r = new Random();
         private static ConsoleColor DefaultBackground = Console.BackgroundColor;
         private static ConsoleColor DefaultForeground = Console.ForegroundColor;
 

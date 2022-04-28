@@ -9,10 +9,7 @@ namespace Minesweeper
 
         static void Main(string[] args)
         {
-            // GameSetup();
-            Board.Initialize(5, 5, 0.1f);
-            // Board.Print();
-            // Board.Flip(0, 0, PlayerAction.DISCOVER);
+            GameSetup();
 
             while (true)
             {
@@ -29,8 +26,6 @@ namespace Minesweeper
                     break;
                 }
             }
-
-            
         }
 
         static void GameSetup()
